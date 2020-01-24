@@ -1,0 +1,10 @@
+version: "3"
+services:
+  backend:
+    container_name: test-product-fpm
+    build: .docker/php/fpm
+    restart: always
+    working_dir: /app
+    volumes:
+    - ./.docker/php/fpm/php-override.ini:/usr/local/etc/php/conf.d/php-override.ini
+    - .:/app

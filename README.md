@@ -28,7 +28,14 @@ API должно содержать несколько методов:
 * doctrine/orm
 * guzzlehttp/guzzle
 
-## Стуктура
+
+## Installation
+```bash
+docker-compose up -d
+docker exec -it test-product-fpm composer install
+```
+
+## Structure
 
 ### Controller
 * Product
