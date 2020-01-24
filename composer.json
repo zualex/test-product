@@ -1,0 +1,17 @@
+{
+    "name": "zualex/test-product",
+    "type": "project",
+    "require": {
+        "php": ">=7.2.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^8.5"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "zualex",
+            "email": "azubarev32@gmail.com"
+        }
+    ]
+}
