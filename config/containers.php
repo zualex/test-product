@@ -39,11 +39,24 @@ $containerBuilder->register('argument_resolver', HttpKernel\Controller\ArgumentR
         )
     ]);
 
+$containerBuilder->register('doctrine_config', Doctrine\ORM\Tools\Setup::class)
+    ->setFactory([Doctrine\ORM\Tools\Setup::class, 'createAnnotationMetadataConfiguration'])
+    ->setArguments([
+        [],
+        getenv('APP_DEBUG'),
+        null,
+        null,
+        false
+    ]);
+
 $containerBuilder->register('entity_manager', Doctrine\ORM\EntityManager::class)
     ->setFactory([Doctrine\ORM\EntityManager::class, 'create'])
     ->setArguments([
-        $dbParams,
-        $config
+        [
+            'driver'   => getenv('DB_DRIVER'),
+            'url' => getenv('DB_CONNECTION_URL'),
+        ],
+        new Reference('doctrine_config')
     ]);
 
 $containerBuilder->register('kernel', Kernel::class)

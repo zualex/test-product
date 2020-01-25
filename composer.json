@@ -10,7 +10,8 @@
         "doctrine/orm": "^2.7",
         "guzzlehttp/guzzle": "^6.5",
         "ext-json": "*",
-        "symfony/validator": "^5.0"
+        "symfony/validator": "^5.0",
+        "vlucas/phpdotenv": "^4.1"
     },
     "require-dev": {
         "phpunit/phpunit": "^8.5",
