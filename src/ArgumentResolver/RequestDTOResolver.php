@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Http;
+namespace App\ArgumentResolver;
 
 use App\DTO\RequestDTOInterface;
 use Symfony\Component\HttpFoundation\Request;

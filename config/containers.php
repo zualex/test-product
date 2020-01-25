@@ -68,10 +68,10 @@ $containerBuilder->register('kernel', Kernel::class)
     ]);
 
 
-$containerBuilder->register('request_dto_resolver', App\Http\RequestDTOResolver::class)
+$containerBuilder->register('request_dto_resolver', App\ArgumentResolver\RequestDTOResolver::class)
     ->setArguments([$validator]);
 
-$containerBuilder->register('service_resolver', \App\Http\ServiceResolver::class)
+$containerBuilder->register('service_resolver', \App\ArgumentResolver\ServiceResolver::class)
     ->setArguments([$containerBuilder]);
 
 $containerBuilder->register('App.Service.ProductService', \App\Service\ProductService::class)
