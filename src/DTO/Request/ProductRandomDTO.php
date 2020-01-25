@@ -30,7 +30,13 @@ class ProductRandomDTO implements RequestDTOInterface, ValidatorDTOInterface
      */
     public static function loadValidatorMetadata(ClassMetadata $metadata): void
     {
-        $metadata->addPropertyConstraint('count', new Assert\NotBlank());
+        $metadata->addPropertyConstraint('count', new Assert\Type([
+            'type' => ['integer', 'null'],
+        ]));
+        $metadata->addPropertyConstraint('count', new Assert\Range([
+            'min' => 1,
+            'max' => 100,
+        ]));
     }
 
     /**
@@ -38,7 +44,7 @@ class ProductRandomDTO implements RequestDTOInterface, ValidatorDTOInterface
      *
      * @return int
      */
-    public function getCount(): int
+    public function getCount(): ?int
     {
         return $this->count;
     }
