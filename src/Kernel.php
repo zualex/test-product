@@ -88,6 +88,10 @@ class Kernel implements HttpKernelInterface
         } catch (ResourceNotFoundException $exception) {
             return new Response('Not Found', 404);
         } catch (\Exception $exception) {
+            if ($this->debug) {
+                throw $exception;
+            }
+
             return new Response('An error occurred', 500);
         }
     }
