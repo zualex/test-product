@@ -2,10 +2,11 @@
 
 declare(strict_types=1);
 
-namespace App\Controller\Base;
+namespace App\Controller\Resolver;
 
 use Psr\Log\LoggerInterface;
 use Psr\Container\ContainerInterface;
+use App\Controller\Base\BaseController;
 use Symfony\Component\HttpKernel\Controller\ControllerResolver;
 
 class ContainerControllerResolver extends ControllerResolver

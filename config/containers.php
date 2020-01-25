@@ -22,17 +22,14 @@ $validator = Validator\Validation::createValidatorBuilder()
     ->addMethodMapping('loadValidatorMetadata')
     ->getValidator();
 
-$containerBuilder->register('controller_resolver', \App\Controller\Base\ContainerControllerResolver::class)
-    ->setArguments([$containerBuilder]);
-
 $containerBuilder->register('argument_resolver', HttpKernel\Controller\ArgumentResolver::class)
     ->setArguments([
         new Reference('argument_metadata_factory'),
         array_merge(
             HttpKernel\Controller\ArgumentResolver::getDefaultArgumentValueResolvers(),
             [
-                new Reference('request_dto_resolver'),
-                new Reference('service_resolver'),
+                new Reference('argument_request_dto_resolver'),
+                new Reference('argument_service_resolver'),
             ]
         )
     ]);
@@ -67,11 +64,13 @@ $containerBuilder->register('kernel', Kernel::class)
         $containerBuilder
     ]);
 
+$containerBuilder->register('controller_resolver', \App\Controller\Resolver\ContainerControllerResolver::class)
+    ->setArguments([$containerBuilder]);
 
-$containerBuilder->register('request_dto_resolver', App\ArgumentResolver\RequestDTOResolver::class)
+$containerBuilder->register('argument_request_dto_resolver', App\Controller\Resolver\ArgumentRequestDTOResolver::class)
     ->setArguments([$validator]);
 
-$containerBuilder->register('service_resolver', \App\ArgumentResolver\ServiceResolver::class)
+$containerBuilder->register('argument_service_resolver', \App\Controller\Resolver\ArgumentServiceResolver::class)
     ->setArguments([$containerBuilder]);
 
 $containerBuilder->register('App.Service.ProductService', \App\Service\ProductService::class)

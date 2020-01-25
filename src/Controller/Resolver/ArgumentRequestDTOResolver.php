@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\ArgumentResolver;
+namespace App\Controller\Resolver;
 
 use App\DTO\RequestDTOInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -11,7 +11,7 @@ use Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadata;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
-class RequestDTOResolver implements ArgumentValueResolverInterface
+class ArgumentRequestDTOResolver implements ArgumentValueResolverInterface
 {
     /**
      * @var ValidatorInterface

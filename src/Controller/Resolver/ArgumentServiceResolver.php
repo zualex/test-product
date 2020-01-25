@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\ArgumentResolver;
+namespace App\Controller\Resolver;
 
 use App\Service\ServiceInterface;
 use Psr\Container\ContainerInterface;
@@ -10,7 +10,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Controller\ArgumentValueResolverInterface;
 use Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadata;
 
-class ServiceResolver implements ArgumentValueResolverInterface
+class ArgumentServiceResolver implements ArgumentValueResolverInterface
 {
     /**
      * @var ContainerInterface
