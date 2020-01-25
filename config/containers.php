@@ -25,7 +25,9 @@ $validator = Validator\Validation::createValidatorBuilder()
 $containerBuilder->register('request_dto_resolver', App\Http\RequestDTOResolver::class)
     ->setArguments([$validator]);
 
-$containerBuilder->register('controller_resolver', HttpKernel\Controller\ControllerResolver::class);
+$containerBuilder->register('controller_resolver', \App\Controller\Resolver\ContainerControllerResolver::class)
+    ->setArguments([$containerBuilder]);
+
 $containerBuilder->register('argument_resolver', HttpKernel\Controller\ArgumentResolver::class)
     ->setArguments([
         new Reference('argument_metadata_factory'),
@@ -37,11 +39,19 @@ $containerBuilder->register('argument_resolver', HttpKernel\Controller\ArgumentR
         )
     ]);
 
+$containerBuilder->register('entity_manager', Doctrine\ORM\EntityManager::class)
+    ->setFactory([Doctrine\ORM\EntityManager::class, 'create'])
+    ->setArguments([
+        $dbParams,
+        $config
+    ]);
+
 $containerBuilder->register('kernel', Kernel::class)
     ->setArguments([
         new Reference('matcher'),
         new Reference('controller_resolver'),
         new Reference('argument_resolver'),
+        $containerBuilder
     ]);
 
 return $containerBuilder;

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App;
 
+use Psr\Container\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
@@ -30,15 +31,26 @@ class Kernel implements HttpKernelInterface
     protected $argumentResolver;
 
     /**
+     * @var ContainerInterface
+     */
+    protected $container;
+
+    /**
      * @param UrlMatcher $matcher
      * @param ControllerResolver $controllerResolver
      * @param ArgumentResolver $argumentResolver
+     * @param ContainerInterface $container
      */
-    public function __construct(UrlMatcher $matcher, ControllerResolver $controllerResolver, ArgumentResolver $argumentResolver)
-    {
+    public function __construct(
+        UrlMatcher $matcher,
+        ControllerResolver $controllerResolver,
+        ArgumentResolver $argumentResolver,
+        ContainerInterface $container
+    ) {
         $this->matcher = $matcher;
         $this->controllerResolver = $controllerResolver;
         $this->argumentResolver = $argumentResolver;
+        $this->container = $container;
     }
 
     /**
