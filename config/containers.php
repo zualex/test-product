@@ -42,8 +42,8 @@ $containerBuilder->register('argument_resolver', HttpKernel\Controller\ArgumentR
 $containerBuilder->register('doctrine_config', Doctrine\ORM\Tools\Setup::class)
     ->setFactory([Doctrine\ORM\Tools\Setup::class, 'createAnnotationMetadataConfiguration'])
     ->setArguments([
-        [],
-        getenv('APP_DEBUG'),
+        [__DIR__ . '/../' . getenv('PATH_TO_ENTITY_FILES')],
+        getenv('APP_DEBUG') === 'true',
         null,
         null,
         false
@@ -61,6 +61,8 @@ $containerBuilder->register('entity_manager', Doctrine\ORM\EntityManager::class)
 
 $containerBuilder->register('kernel', Kernel::class)
     ->setArguments([
+        getenv('APP_ENV'),
+        getenv('APP_DEBUG') === 'true',
         new Reference('matcher'),
         new Reference('controller_resolver'),
         new Reference('argument_resolver'),

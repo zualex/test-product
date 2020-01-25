@@ -16,6 +16,16 @@ use Symfony\Component\Routing\Matcher\UrlMatcher;
 class Kernel implements HttpKernelInterface
 {
     /**
+     * @var string
+     */
+    protected $environment;
+
+    /**
+     * @var bool
+     */
+    protected $debug;
+
+    /**
      * @var UrlMatcher
      */
     protected $matcher;
@@ -36,17 +46,23 @@ class Kernel implements HttpKernelInterface
     protected $container;
 
     /**
+     * @param string $environment
+     * @param bool $debug
      * @param UrlMatcher $matcher
      * @param ControllerResolver $controllerResolver
      * @param ArgumentResolver $argumentResolver
      * @param ContainerInterface $container
      */
     public function __construct(
+        string $environment,
+        bool $debug,
         UrlMatcher $matcher,
         ControllerResolver $controllerResolver,
         ArgumentResolver $argumentResolver,
         ContainerInterface $container
     ) {
+        $this->environment = $environment;
+        $this->debug = $debug;
         $this->matcher = $matcher;
         $this->controllerResolver = $controllerResolver;
         $this->argumentResolver = $argumentResolver;
