@@ -1,5 +1,21 @@
 version: "3"
 services:
+  mysql:
+    restart: always
+    container_name: test-product-mysql
+    image: mysql:5.7
+    volumes:
+    - ./.docker/mysql/data:/var/lib/mysql
+    ports:
+    - "3306:3306"
+    environment:
+      MYSQL_DATABASE: test_product
+      MYSQL_USER: local_user
+      MYSQL_PASSWORD: 123456
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
+    command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci --innodb-flush-method=littlesync --innodb-use-native-aio=OFF --max-allowed-packet=1073741824 --sql_mode="IGNORE_SPACE,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION"
+
   backend:
     container_name: test-product-fpm
     build: .docker/php/fpm
@@ -8,6 +24,8 @@ services:
     volumes:
     - ./.docker/php/fpm/php-override.ini:/usr/local/etc/php/conf.d/php-override.ini
     - .:/app
+    links:
+    - mysql
 
   webserver:
     restart: always
