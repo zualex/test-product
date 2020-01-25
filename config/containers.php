@@ -22,9 +22,6 @@ $validator = Validator\Validation::createValidatorBuilder()
     ->addMethodMapping('loadValidatorMetadata')
     ->getValidator();
 
-$containerBuilder->register('request_dto_resolver', App\Http\RequestDTOResolver::class)
-    ->setArguments([$validator]);
-
 $containerBuilder->register('controller_resolver', \App\Controller\Base\ContainerControllerResolver::class)
     ->setArguments([$containerBuilder]);
 
@@ -35,6 +32,7 @@ $containerBuilder->register('argument_resolver', HttpKernel\Controller\ArgumentR
             HttpKernel\Controller\ArgumentResolver::getDefaultArgumentValueResolvers(),
             [
                 new Reference('request_dto_resolver'),
+                new Reference('service_resolver'),
             ]
         )
     ]);
@@ -68,5 +66,15 @@ $containerBuilder->register('kernel', Kernel::class)
         new Reference('argument_resolver'),
         $containerBuilder
     ]);
+
+
+$containerBuilder->register('request_dto_resolver', App\Http\RequestDTOResolver::class)
+    ->setArguments([$validator]);
+
+$containerBuilder->register('service_resolver', \App\Http\ServiceResolver::class)
+    ->setArguments([$containerBuilder]);
+
+$containerBuilder->register('App.Service.ProductService', \App\Service\ProductService::class)
+    ->setArguments([new Reference('entity_manager')]);
 
 return $containerBuilder;
