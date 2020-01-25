@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Controller\Base\BaseController;
 use App\DTO\Request\ProductRandomDTO;
 use Symfony\Component\HttpFoundation\Response;
 

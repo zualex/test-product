@@ -2,9 +2,8 @@
 
 declare(strict_types=1);
 
-namespace App\Controller\Resolver;
+namespace App\Controller\Base;
 
-use App\Controller\BaseController;
 use Psr\Log\LoggerInterface;
 use Psr\Container\ContainerInterface;
 use Symfony\Component\HttpKernel\Controller\ControllerResolver;

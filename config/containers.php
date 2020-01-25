@@ -25,7 +25,7 @@ $validator = Validator\Validation::createValidatorBuilder()
 $containerBuilder->register('request_dto_resolver', App\Http\RequestDTOResolver::class)
     ->setArguments([$validator]);
 
-$containerBuilder->register('controller_resolver', \App\Controller\Resolver\ContainerControllerResolver::class)
+$containerBuilder->register('controller_resolver', \App\Controller\Base\ContainerControllerResolver::class)
     ->setArguments([$containerBuilder]);
 
 $containerBuilder->register('argument_resolver', HttpKernel\Controller\ArgumentResolver::class)

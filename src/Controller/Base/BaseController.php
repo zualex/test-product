@@ -2,11 +2,10 @@
 
 declare(strict_types=1);
 
-namespace App\Controller;
+namespace App\Controller\Base;
 
 use Doctrine\ORM\EntityManager;
 use Psr\Container\ContainerInterface;
-use Doctrine\Common\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 class BaseController
