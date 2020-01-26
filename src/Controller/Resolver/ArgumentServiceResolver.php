@@ -41,17 +41,7 @@ class ArgumentServiceResolver implements ArgumentValueResolverInterface
     public function resolve(Request $request, ArgumentMetadata $argument)
     {
         $class = $argument->getType();
-        $key = $this->getContainerKey($class);
 
-        yield $this->container->get($key);
-    }
-
-    /**
-     * @param string $class
-     * @return string
-     */
-    private function getContainerKey(string $class): string
-    {
-        return str_replace('\\', '.', $class);
+        yield $this->container->get($class);
     }
 }
