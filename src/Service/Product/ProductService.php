@@ -96,7 +96,10 @@ class ProductService implements ServiceInterface
         return $product;
     }
 
-    private function getDefaultCount(): int
+    /**
+     * @return int
+     */
+    public function getDefaultCount(): int
     {
         return self::DEFAULT_COUNT;
     }

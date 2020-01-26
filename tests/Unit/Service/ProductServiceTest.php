@@ -39,7 +39,7 @@ class ProductServiceTest extends BaseTestCase
         $this->assertNull($productNotFlushed->getId());
     }
 
-    public function testBatchCreateRandom()
+    public function testBatchCreateRandom(): void
     {
         $count = 3;
 
@@ -53,6 +53,23 @@ class ProductServiceTest extends BaseTestCase
         $this->assertCount($count, $products);
         $this->assertEquals($totalAfter, $totalPrev + $count);
     }
+
+    public function testBatchCreateRandomByDefaultCount(): void
+    {
+        $products = $this->getProductService()->batchCreateRandom(null);
+
+        $this->assertCount($this->getProductService()->getDefaultCount(), $products);
+    }
+
+    public function testBatchCreateRandomCountNotValid(): void
+    {
+        $productsLessZero = $this->getProductService()->batchCreateRandom(-1);
+        $productsZero = $this->getProductService()->batchCreateRandom(0);
+
+        $this->assertCount(0, $productsLessZero);
+        $this->assertCount(0, $productsZero);
+    }
+
 
     /**
      * @return ProductService
