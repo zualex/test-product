@@ -17,4 +17,15 @@ $routes->add('product', new Routing\Route('/product/random',
     ['POST']
 ));
 
+$routes->add('order', new Routing\Route('/order',
+    [
+        '_controller' => 'App\Controller\OrderController::create',
+    ],
+    [],
+    [],
+    '',
+    [],
+    ['POST']
+));
+
 return $routes;
