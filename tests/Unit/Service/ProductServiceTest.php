@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Tests\Unit\Service;
 
 use App\Entity\Product;
-use App\Service\ProductService;
+use App\Service\Product\ProductService;
 use Tests\BaseTestCase;
 use Tests\DatabaseTransactions;
 
@@ -22,7 +22,7 @@ class ProductServiceTest extends BaseTestCase
         $totalPrev = $repository->getAllCount();
 
         /** @var ProductService $productService */
-        $productService = self::$container->get('App.Service.ProductService');
+        $productService = self::$container->get(ProductService::class);
         $productIds = $productService->batchCreateRandom($count);
 
         $totalAfter = $repository->getAllCount();

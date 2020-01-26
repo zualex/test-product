@@ -6,7 +6,7 @@ namespace App\Controller;
 
 use App\Controller\Base\BaseController;
 use App\DTO\Request\ProductRandomDTO;
-use App\Service\ProductService;
+use App\Service\Product\ProductService;
 use Symfony\Component\HttpFoundation\Response;
 
 class ProductController extends BaseController

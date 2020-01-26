@@ -73,7 +73,7 @@ $containerBuilder->register('argument_request_dto_resolver', App\Controller\Reso
 $containerBuilder->register('argument_service_resolver', \App\Controller\Resolver\ArgumentServiceResolver::class)
     ->setArguments([$containerBuilder]);
 
-$containerBuilder->register('App.Service.ProductService', \App\Service\ProductService::class)
+$containerBuilder->register(\App\Service\Product\ProductService::class, \App\Service\Product\ProductService::class)
     ->setArguments([new Reference('entity_manager')]);
 
 return $containerBuilder;

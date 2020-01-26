@@ -2,9 +2,10 @@
 
 declare(strict_types=1);
 
-namespace App\Service;
+namespace App\Service\Product;
 
 use App\Entity\Product;
+use App\Service\ServiceInterface;
 use Doctrine\ORM\EntityManager;
 use Faker\Factory;
 
@@ -98,7 +99,7 @@ class ProductService implements ServiceInterface
         return $product;
     }
 
-    private function getDefaultCount()
+    private function getDefaultCount(): int
     {
         return self::DEFAULT_COUNT;
     }
