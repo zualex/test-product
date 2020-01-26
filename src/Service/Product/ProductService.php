@@ -34,7 +34,7 @@ class ProductService implements ServiceInterface
      *
      * @param int|null $count
      *
-     * @return array
+     * @return Product[]
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
      */
@@ -50,10 +50,7 @@ class ProductService implements ServiceInterface
 
         $this->entityManager->flush();
 
-        return array_map(static function ($item) {
-            /** @var $item Product */
-            return $item->getId();
-        }, $result);
+        return $result;
     }
 
     /**
