@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App;
 
 use App\DTO\Response\ErrorResponseDTO;
+use App\Service\ServiceException;
 use Psr\Container\ContainerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -134,8 +135,8 @@ class Kernel implements HttpKernelInterface
             return new JsonResponse(new ErrorResponseDTO('method_not_allowed', 'Method '.$request->getMethod().' not allowed', $errorInfo), 400);
         }
 
-        if ($exception instanceof BadRequestHttpException) {
-            return new JsonResponse(new ErrorResponseDTO('bad_request', $exception->getMessage(), $errorInfo), 400);
+        if ($exception instanceof ServiceException) {
+            return new JsonResponse(new ErrorResponseDTO('request_failed', $exception->getMessage(), $errorInfo), 402);
         }
 
         return new JsonResponse(new ErrorResponseDTO('error', 'An error occurred', $errorInfo), 500);
