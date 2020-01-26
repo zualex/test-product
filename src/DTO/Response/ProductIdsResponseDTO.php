@@ -6,7 +6,7 @@ namespace App\DTO\Response;
 
 use App\Entity\Product;
 
-class ResponseProductIdsDTO extends ResponseDTO
+class ProductIdsResponseDTO extends ResponseDTO
 {
     public const OBJECT = 'product_ids';
 

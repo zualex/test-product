@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Controller\Base\BaseController;
-use App\DTO\Request\ProductRandomDTO;
-use App\DTO\Response\ResponseProductIdsDTO;
+use App\DTO\Request\CreateProductRandomRequestDTO;
+use App\DTO\Response\ProductIdsResponseDTO;
 use App\Service\Product\ProductService;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -15,17 +15,19 @@ class ProductController extends BaseController
     /**
      * Create random product
      *
-     * @param ProductRandomDTO $productRandomDTO
+     * @param CreateProductRandomRequestDTO $createProductRandomRequestDTO
      * @param ProductService $productService
      * @return Response
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
      */
-    public function createRandom(ProductRandomDTO $productRandomDTO, ProductService $productService): Response
-    {
-        $count = $productRandomDTO->getCount();
+    public function createRandom(
+        CreateProductRandomRequestDTO $createProductRandomRequestDTO,
+        ProductService $productService
+    ): Response {
+        $count = $createProductRandomRequestDTO->getCount();
         $products = $productService->batchCreateRandom($count);
-        $responseDTO = ResponseProductIdsDTO::createFromListProductEntity($products);
+        $responseDTO = ProductIdsResponseDTO::createFromListProductEntity($products);
 
         return $this->json($responseDTO);
     }

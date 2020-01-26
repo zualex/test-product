@@ -10,7 +10,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\Mapping\ClassMetadata;
 
-class ProductRandomDTO implements RequestDTOInterface, ValidatorDTOInterface
+class CreateProductRandomRequestDTO implements RequestDTOInterface, ValidatorDTOInterface
 {
     /**
      * @var int
