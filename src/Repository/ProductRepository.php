@@ -33,4 +33,13 @@ class ProductRepository extends EntityRepository
             return $row['id'];
         }, $result);
     }
+
+    /**
+     * @param array $productIds
+     * @return self[]
+     */
+    public function findByIds(array $productIds): array
+    {
+        return $this->findBy(['id' => $productIds]);
+    }
 }

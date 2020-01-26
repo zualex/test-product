@@ -6,22 +6,28 @@ namespace App\Controller;
 
 use App\Controller\Base\BaseController;
 use App\DTO\Request\CreateOrderRequestDTO;
+use App\DTO\Response\OrderResponseDTO;
+use App\Service\Order\OrderService;
 use Symfony\Component\HttpFoundation\Response;
 
 class OrderController extends BaseController
 {
     /**
-     * Create random product
+     * Create order
      *
      * @param CreateOrderRequestDTO $createOrderDTO
+     * @param OrderService $orderService
+     *
      * @return Response
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
      */
-    public function create(CreateOrderRequestDTO $createOrderDTO): Response
+    public function create(CreateOrderRequestDTO $createOrderDTO, OrderService $orderService): Response
     {
         $productIds = $createOrderDTO->getProductIds();
-        dd($productIds);
+        $order = $orderService->create($productIds);
+        $responseDTO = OrderResponseDTO::createFromOrderEntity($order);
 
-
-        return $this->json('123');
+        return $this->json($responseDTO);
     }
 }
