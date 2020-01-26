@@ -12,6 +12,7 @@ use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\HttpKernel\Controller\ArgumentResolver;
 use Symfony\Component\HttpKernel\Controller\ControllerResolver;
+use Symfony\Component\Routing\Exception\MethodNotAllowedException;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Symfony\Component\Routing\Matcher\UrlMatcher;
 
@@ -88,7 +89,7 @@ class Kernel implements HttpKernelInterface
 
             return call_user_func_array($controller, $arguments);
         } catch (\Throwable $exception) {
-            return $this->handleException($exception);
+            return $this->handleException($request, $exception);
         }
     }
 
@@ -108,10 +109,11 @@ class Kernel implements HttpKernelInterface
     /**
      * Handle exception
      *
+     * @param Request $request
      * @param \Throwable $exception
      * @return JsonResponse
      */
-    protected function handleException(\Throwable $exception): JsonResponse
+    protected function handleException(Request $request, \Throwable $exception): JsonResponse
     {
         $errorInfo = null;
 
@@ -126,6 +128,10 @@ class Kernel implements HttpKernelInterface
 
         if ($exception instanceof ResourceNotFoundException) {
             return new JsonResponse(new ErrorResponseDTO('resource_missing', 'Not found'), 404);
+        }
+
+        if ($exception instanceof MethodNotAllowedException) {
+            return new JsonResponse(new ErrorResponseDTO('method_not_allowed', 'Method '.$request->getMethod().' not allowed', $errorInfo), 400);
         }
 
         if ($exception instanceof BadRequestHttpException) {
