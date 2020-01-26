@@ -15,4 +15,22 @@ class ProductRepository extends EntityRepository
             ->getQuery()
             ->getSingleScalarResult();
     }
+
+    /**
+     * @param array $productIds
+     * @return array
+     */
+    public function getIdsByList(array $productIds): array
+    {
+        $result = $this->createQueryBuilder('a')
+            ->select('a.id')
+            ->andWhere('a.id IN (:ids)')
+            ->setParameter('ids', $productIds)
+            ->getQuery()
+            ->getResult();
+
+        return array_map(function($row) {
+            return $row['id'];
+        }, $result);
+    }
 }

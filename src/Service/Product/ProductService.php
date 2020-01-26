@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Service\Product;
 
 use App\Entity\Product;
+use App\Service\Product\Exception\NotExistProductIdException;
 use App\Service\ServiceInterface;
 use Doctrine\ORM\EntityManager;
 use Faker\Factory;
@@ -94,6 +95,24 @@ class ProductService implements ServiceInterface
         }
 
         return $product;
+    }
+
+    /**
+     * @param array $productIds
+     * @return bool
+     */
+    public function validateProductIds(array $productIds): bool
+    {
+        $ids = $this->entityManager->getRepository(Product::class)
+            ->getIdsByList($productIds);
+
+        if (count($productIds) !== count($ids)) {
+            $missingValues = implode(', ', array_diff($productIds, $ids));
+
+            throw new NotExistProductIdException('Not exist product ids: ' . $missingValues);
+        }
+
+        return true;
     }
 
     /**

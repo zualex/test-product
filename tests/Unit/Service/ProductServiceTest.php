@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace Tests\Unit\Service;
 
+use App\DTO\Response\ProductIdsResponseDTO;
 use App\Entity\Product;
+use App\Service\Product\Exception\NotExistProductIdException;
 use App\Service\Product\ProductService;
 use Tests\BaseTestCase;
 use Tests\DatabaseTransactions;
@@ -70,6 +72,20 @@ class ProductServiceTest extends BaseTestCase
         $this->assertCount(0, $productsZero);
     }
 
+    public function testValidateProductIds(): void
+    {
+        $products = $this->getProductService()->batchCreateRandom(2);
+        $result = $this->getProductService()->validateProductIds([$products[0]->getId(), $products[1]->getId()]);
+
+        $this->assertTrue($result);
+    }
+
+    public function testValidateProductIdsWithException(): void
+    {
+        $this->expectException(NotExistProductIdException::class);
+
+        $this->getProductService()->validateProductIds([-1, -2]);
+    }
 
     /**
      * @return ProductService
