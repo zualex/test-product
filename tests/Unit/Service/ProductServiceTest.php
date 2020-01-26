@@ -16,7 +16,7 @@ class ProductServiceTest extends BaseTestCase
     public function testCreate(): void
     {
         $name = $this->faker->name;
-        $price = $this->faker->numberBetween($min = 0, $max = 1000000);
+        $price = $this->faker->numberBetween($min = 0, $max = 1000);
 
         $product = $this->getProductService()->create($name, $price);
         $productNotFlushed = $this->getProductService()->create($name, $price, false);

@@ -12,6 +12,8 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Product
 {
+    public const PRICE_MULTIPLIER = 1000000;
+
     /**
      * @var int
      *
@@ -29,9 +31,9 @@ class Product
     private $name;
 
     /**
-     * @var int
+     * @var float|null
      *
-     * @ORM\Column(type="integer", nullable=true, options={"unsigned"=true})
+     * @ORM\Column(type="bigint", nullable=true, options={"unsigned"=true})
      */
     private $price;
 
@@ -52,14 +54,18 @@ class Product
         return $this;
     }
 
-    public function getPrice(): ?int
+    public function getPrice(): ?float
     {
-        return $this->price;
+        if ($this->price !== null) {
+            return round($this->price / self::PRICE_MULTIPLIER, 6);
+        }
+
+        return null;
     }
 
-    public function setPrice(int $price): self
+    public function setPrice(float $price): self
     {
-        $this->price = $price;
+        $this->price = $price * self::PRICE_MULTIPLIER;
 
         return $this;
     }
