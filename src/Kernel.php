@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace App;
 
+use App\DTO\Response\ErrorResponseDTO;
 use Psr\Container\ContainerInterface;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\HttpKernel\Controller\ArgumentResolver;
 use Symfony\Component\HttpKernel\Controller\ControllerResolver;
@@ -85,14 +87,8 @@ class Kernel implements HttpKernelInterface
             $arguments = $this->argumentResolver->getArguments($request, $controller);
 
             return call_user_func_array($controller, $arguments);
-        } catch (ResourceNotFoundException $exception) {
-            return new Response('Not Found', 404);
-        } catch (\Exception $exception) {
-            if ($this->debug) {
-                throw $exception;
-            }
-
-            return new Response('An error occurred', 500);
+        } catch (\Throwable $exception) {
+            return $this->handleException($exception);
         }
     }
 
@@ -107,5 +103,35 @@ class Kernel implements HttpKernelInterface
             $data = json_decode($request->getContent(), true);
             $request->request->replace(is_array($data) ? $data : []);
         }
+    }
+
+    /**
+     * Handle exception
+     *
+     * @param \Throwable $exception
+     * @return JsonResponse
+     */
+    protected function handleException(\Throwable $exception): JsonResponse
+    {
+        $errorInfo = null;
+
+        if ($this->debug) {
+            $errorInfo = [
+                'message' => $exception->getMessage(),
+                'file' => $exception->getFile(),
+                'line' => $exception->getLine(),
+                'stack-trace' => explode("\n", $exception->getTraceAsString()),
+            ];
+        }
+
+        if ($exception instanceof ResourceNotFoundException) {
+            return new JsonResponse(new ErrorResponseDTO('resource_missing', 'Not found'), 404);
+        }
+
+        if ($exception instanceof BadRequestHttpException) {
+            return new JsonResponse(new ErrorResponseDTO('bad_request', $exception->getMessage(), $errorInfo), 400);
+        }
+
+        return new JsonResponse(new ErrorResponseDTO('error', 'An error occurred', $errorInfo), 500);
     }
 }
