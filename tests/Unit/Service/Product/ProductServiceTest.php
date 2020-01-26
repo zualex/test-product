@@ -2,9 +2,8 @@
 
 declare(strict_types=1);
 
-namespace Tests\Unit\Service;
+namespace Tests\Unit\Service\Product;
 
-use App\DTO\Response\ProductIdsResponseDTO;
 use App\Entity\Product;
 use App\Service\Product\Exception\NotExistProductIdException;
 use App\Service\Product\ProductService;

@@ -76,4 +76,10 @@ $containerBuilder->register('argument_service_resolver', \App\Controller\Resolve
 $containerBuilder->register(\App\Service\Product\ProductService::class, \App\Service\Product\ProductService::class)
     ->setArguments([new Reference('entity_manager')]);
 
+$containerBuilder->register(\App\Service\Order\OrderService::class, \App\Service\Order\OrderService::class)
+    ->setArguments([
+        new Reference('entity_manager'),
+        new Reference(\App\Service\Product\ProductService::class)
+    ]);
+
 return $containerBuilder;
