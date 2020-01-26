@@ -44,16 +44,27 @@ class Order
         $this->orderItems = new ArrayCollection();
     }
 
+    /**
+     * @return int|null
+     */
     public function getId(): ?int
     {
         return $this->id;
     }
 
+    /**
+     * @return int
+     */
     public function getStatus(): int
     {
         return $this->status;
     }
 
+    /**
+     * @param int $status
+     *
+     * @return self
+     */
     public function setStatus(int $status): self
     {
         $this->status = $status;
@@ -71,7 +82,8 @@ class Order
 
     /**
      * @param OrderItem $orderItem
-     * @return $this
+     *
+     * @return self
      */
     public function addOrderItem(OrderItem $orderItem): self
     {
@@ -85,7 +97,8 @@ class Order
 
     /**
      * @param OrderItem $orderItem
-     * @return $this
+     *
+     * @return self
      */
     public function removeOrderItem(OrderItem $orderItem): self
     {

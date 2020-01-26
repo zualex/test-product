@@ -37,16 +37,27 @@ class Product
      */
     private $price;
 
+    /**
+     * @return int|null
+     */
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getName(): ?string
+    /**
+     * @return string
+     */
+    public function getName(): string
     {
         return $this->name;
     }
 
+    /**
+     * @param string $name
+     *
+     * @return self
+     */
     public function setName(string $name): self
     {
         $this->name = $name;
@@ -54,6 +65,9 @@ class Product
         return $this;
     }
 
+    /**
+     * @return float|null
+     */
     public function getPrice(): ?float
     {
         if ($this->price !== null) {
@@ -63,6 +77,11 @@ class Product
         return null;
     }
 
+    /**
+     * @param float $price
+     *
+     * @return self
+     */
     public function setPrice(float $price): self
     {
         $this->price = $price * self::PRICE_MULTIPLIER;

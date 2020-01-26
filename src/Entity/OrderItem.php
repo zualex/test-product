@@ -60,6 +60,9 @@ class OrderItem
      */
     private $count;
 
+    /**
+     * @return int|null
+     */
     public function getId(): ?int
     {
         return $this->id;
@@ -75,7 +78,8 @@ class OrderItem
 
     /**
      * @param Order|null $order
-     * @return OrderItem
+     *
+     * @return self
      */
     public function setOrder(Order $order = null): self
     {
@@ -94,7 +98,8 @@ class OrderItem
 
     /**
      * @param Product|null $product
-     * @return OrderItem
+     *
+     * @return self
      */
     public function setProduct(Product $product = null): self
     {
@@ -113,7 +118,8 @@ class OrderItem
 
     /**
      * @param string $name
-     * @return OrderItem
+     *
+     * @return self
      */
     public function setName(string $name): self
     {
@@ -136,7 +142,8 @@ class OrderItem
 
     /**
      * @param float $price
-     * @return OrderItem
+     *
+     * @return self
      */
     public function setPrice(float $price): self
     {
@@ -155,7 +162,8 @@ class OrderItem
 
     /**
      * @param int $count
-     * @return OrderItem
+     *
+     * @return self
      */
     public function setCount(int $count): self
     {
