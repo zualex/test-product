@@ -13,21 +13,52 @@ class ProductServiceTest extends BaseTestCase
 {
     use DatabaseTransactions;
 
-    public function testBasicTest()
+    public function testCreate(): void
     {
+        $name = $this->faker->name;
+        $price = $this->faker->numberBetween($min = 0, $max = 1000000);
+
+        $product = $this->getProductService()->create($name, $price);
+        $productNotFlushed = $this->getProductService()->create($name, $price, false);
+
+        $this->assertNotNull($product->getId());
+        $this->assertEquals($name, $product->getName());
+        $this->assertEquals($price, $product->getPrice());
+
+        $this->assertNull($productNotFlushed->getId());
+        $this->assertEquals($name, $productNotFlushed->getName());
+        $this->assertEquals($price, $productNotFlushed->getPrice());
+    }
+
+    public function testCreateRandom(): void
+    {
+        $product = $this->getProductService()->createRandom();
+        $productNotFlushed = $this->getProductService()->createRandom(false);
+
+        $this->assertNotNull($product->getId());
+        $this->assertNull($productNotFlushed->getId());
+    }
+
+    public function testBatchCreateRandom()
+    {
+        $count = 3;
+
         $em = $this->getEntityManager();
         $repository = $em->getRepository(Product::class);
-
-        $count = 5;
         $totalPrev = $repository->getAllCount();
 
-        /** @var ProductService $productService */
-        $productService = self::$container->get(ProductService::class);
-        $productIds = $productService->batchCreateRandom($count);
-
+        $products = $this->getProductService()->batchCreateRandom($count);
         $totalAfter = $repository->getAllCount();
 
-        $this->assertCount($count, $productIds);
+        $this->assertCount($count, $products);
         $this->assertEquals($totalAfter, $totalPrev + $count);
+    }
+
+    /**
+     * @return ProductService
+     */
+    private function getProductService(): ProductService
+    {
+        return self::$container->get(ProductService::class);
     }
 }

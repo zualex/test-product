@@ -5,12 +5,19 @@ declare(strict_types=1);
 namespace Tests;
 
 use Doctrine\ORM\EntityManager;
+use Faker\Factory as FakerFactory;
+use Faker\Generator;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 
 class BaseTestCase extends TestCase
 {
+    /**
+     * @var Generator
+     */
+    protected $faker;
+
     /**
      * @var HttpKernelInterface
      */
@@ -67,6 +74,13 @@ class BaseTestCase extends TestCase
         $routes = include __DIR__.'/../config/routes.php';
 
         return include __DIR__.'/../config/containers.php';
+    }
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->faker = FakerFactory::create();
     }
 
     protected function getEntityManager(): EntityManager
