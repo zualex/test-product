@@ -6,6 +6,8 @@ namespace App\Controller;
 
 use App\Controller\Base\BaseController;
 use App\DTO\Request\CreateOrderRequestDTO;
+use App\DTO\Request\PayOrderRequestDTO;
+use App\DTO\Response\BooleanResponseDTO;
 use App\DTO\Response\OrderResponseDTO;
 use App\Service\Order\OrderService;
 use Symfony\Component\HttpFoundation\Response;
@@ -29,5 +31,24 @@ class OrderController extends BaseController
         $responseDTO = OrderResponseDTO::createFromOrderEntity($order);
 
         return $this->json($responseDTO);
+    }
+
+    /**
+     * Pay order
+     *
+     * @param PayOrderRequestDTO $payOrderDTO
+     * @param OrderService $orderService
+     *
+     * @return Response
+     * @throws \Throwable
+     */
+    public function pay(PayOrderRequestDTO $payOrderDTO, OrderService $orderService): Response
+    {
+        $orderId = $payOrderDTO->getOrderId();
+        $amount = $payOrderDTO->getAmount();
+
+        $orderService->pay($orderId, $amount);
+
+        return $this->json(new BooleanResponseDTO(true));
     }
 }

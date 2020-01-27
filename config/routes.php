@@ -28,4 +28,15 @@ $routes->add('order', new Routing\Route('/order',
     ['POST']
 ));
 
+$routes->add('order:pay', new Routing\Route('/order/{orderId}/pay',
+    [
+        '_controller' => 'App\Controller\OrderController::pay',
+    ],
+    [],
+    [],
+    '',
+    [],
+    ['POST']
+));
+
 return $routes;
