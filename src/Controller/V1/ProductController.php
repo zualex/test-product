@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Controller;
+namespace App\Controller\V1;
 
 use App\Controller\Base\BaseController;
 use App\DTO\Request\CreateProductRandomRequestDTO;
