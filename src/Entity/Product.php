@@ -69,7 +69,7 @@ class Product
      */
     public function getPrice(): MoneyAmount
     {
-        return MoneyAmount::fromInternal((int) $this->price);
+        return MoneyAmount::fromInternal($this->price);
     }
 
     /**

@@ -10,45 +10,47 @@ class MoneyAmount
     public const API_MULTIPLIER = 100;
 
     /**
-     * @var int
+     * @var string
      */
     private $amount;
 
     /**
-     * @param int $amount internal
+     * @param int|string $amount internal
      */
-    private function __construct(int $amount)
+    private function __construct($amount)
     {
-        $this->amount = $amount;
+        $this->amount = (string) $amount;
     }
 
     /**
-     * @param float $amount example 10.55
+     * @param int|float|string $amount example 10.55
      * @return MoneyAmount
      */
-    public static function fromReadable(float $amount): MoneyAmount
+    public static function fromReadable($amount): MoneyAmount
     {
-        $result = (int) ($amount * self::INTERNAL_MULTIPLIER);
+        $result = bcmul((string) $amount, (string) self::INTERNAL_MULTIPLIER);
+
 
         return new self($result);
     }
 
     /**
-     * @param int $amount example 1055 (10.55 in readable format)
+     * @param int|string $amount example 1055 (10.55 in readable format)
      * @return MoneyAmount
      */
-    public static function fromApi(int $amount): MoneyAmount
+    public static function fromApi($amount): MoneyAmount
     {
-        $result = (int) ($amount / self::API_MULTIPLIER * self::INTERNAL_MULTIPLIER);
+        $divisor = (string) (self::INTERNAL_MULTIPLIER / self::API_MULTIPLIER);
+        $result = bcmul((string) $amount, $divisor);
 
         return new self($result);
     }
 
     /**
-     * @param int $amount example 10550000 (10.55 in readable format)
+     * @param int|string $amount example 10550000 (10.55 in readable format)
      * @return MoneyAmount
      */
-    public static function fromInternal(int $amount): MoneyAmount
+    public static function fromInternal($amount): MoneyAmount
     {
         return new self($amount);
     }
@@ -58,7 +60,9 @@ class MoneyAmount
      */
     public function toReadable(): float
     {
-        return round($this->amount / self::INTERNAL_MULTIPLIER, 6);
+        $result = bcdiv($this->amount, (string) self::INTERNAL_MULTIPLIER, 6);
+
+        return (float) $result;
     }
 
     /**
@@ -66,13 +70,16 @@ class MoneyAmount
      */
     public function toApi(): int
     {
-        return (int) round($this->amount / (self::INTERNAL_MULTIPLIER / self::API_MULTIPLIER), 0);
+        $divisor = (string) (self::INTERNAL_MULTIPLIER / self::API_MULTIPLIER);
+        $result = bcdiv($this->amount, $divisor, 0);
+
+        return (int) $result;
     }
 
     /**
-     * @return int example 10550000 (10.55 in readable format)
+     * @return string example 10550000 (10.55 in readable format)
      */
-    public function toInternal(): int
+    public function toInternal(): string
     {
         return $this->amount;
     }
@@ -101,7 +108,7 @@ class MoneyAmount
      */
     public function add(MoneyAmount $amount): MoneyAmount
     {
-        $result = $this->amount + $amount->toInternal();
+        $result = bcadd($this->amount, $amount->toInternal());
 
         return new self($result);
     }
