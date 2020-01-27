@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tests\Unit\Service\Product;
+namespace Tests\Unit\Service\Order;
 
 use App\Entity\Order;
 use App\Entity\OrderItem;

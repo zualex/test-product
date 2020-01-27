@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tests\Unit\Service\Product;
+namespace Tests\Unit\Util;
 
 use App\Util\MoneyAmount;
 use PHPUnit\Framework\TestCase;
@@ -106,5 +106,15 @@ class MoneyAmountTest extends TestCase
 
         $this->assertTrue($a->equal($b));
         $this->assertFalse($a->equal($c));
+    }
+
+    public function testAdd(): void
+    {
+        $a = MoneyAmount::fromReadable(0);
+        $b = MoneyAmount::fromReadable(9.555);
+        $c = MoneyAmount::fromReadable(0.445);
+
+        $this->assertEquals(9.555, $a->add($b)->toReadable());
+        $this->assertEquals(10, $a->add($b)->add($c)->toReadable());
     }
 }

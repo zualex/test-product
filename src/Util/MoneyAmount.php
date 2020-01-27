@@ -85,4 +85,15 @@ class MoneyAmount
     {
         return $this->amount === $amount->toInternal();
     }
+
+    /**
+     * @param MoneyAmount $amount
+     * @return MoneyAmount
+     */
+    public function add(MoneyAmount $amount): MoneyAmount
+    {
+        $result = $this->amount + $amount->toInternal();
+
+        return new self($result);
+    }
 }
