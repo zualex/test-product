@@ -97,4 +97,14 @@ class MoneyAmountTest extends TestCase
             [0, 0, 0, 0],
         ];
     }
+
+    public function testEqual(): void
+    {
+        $a = MoneyAmount::fromReadable(10.55);
+        $b = MoneyAmount::fromReadable(10.55);
+        $c = MoneyAmount::fromReadable(10.550001);
+
+        $this->assertTrue($a->equal($b));
+        $this->assertFalse($a->equal($c));
+    }
 }
