@@ -88,6 +88,15 @@ class MoneyAmount
 
     /**
      * @param MoneyAmount $amount
+     * @return bool
+     */
+    public function notEqual(MoneyAmount $amount): bool
+    {
+        return $this->equal($amount) === false;
+    }
+
+    /**
+     * @param MoneyAmount $amount
      * @return MoneyAmount
      */
     public function add(MoneyAmount $amount): MoneyAmount

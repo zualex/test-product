@@ -105,7 +105,10 @@ class MoneyAmountTest extends TestCase
         $c = MoneyAmount::fromReadable(10.550001);
 
         $this->assertTrue($a->equal($b));
+        $this->assertFalse($a->notEqual($b));
+
         $this->assertFalse($a->equal($c));
+        $this->assertTrue($a->notEqual($c));
     }
 
     public function testAdd(): void
