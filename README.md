@@ -33,40 +33,108 @@ API должно содержать несколько методов:
 ```bash
 docker-compose up -d
 docker exec -it test-product-fpm composer install
+
+docker exec -it test-product-fpm \
+    php vendor/doctrine/orm/bin/doctrine orm:schema-tool:update --force --dump-sql
 ```
 
-## Structure
+#### Create .env
+```bash
+docker exec -it test-product-fpm \
+    php -r "file_exists('.env') || copy('.env.example', '.env');"
+    
+docker exec -it test-product-fpm \
+    php -r "file_exists('.env.testing') || copy('.env.example', '.env.testing');"
+```
 
-### Controller
-* Product
-    * createRandom(int $count) - генерация рандомных сущностей "товар"
-* Order
-    * create(array $productIds) - создание заказа
-    * pay(int $orderId, int $totalPrice) - оплата заказа
+Please update `.env` and `.env.testing` files.
 
-### Entity
-* Product:
-    * id
-    * name
-    * price
-* Order
-    * id
-    * status
+## Run tests
+```bash
+docker exec -it test-product-fpm vendor/bin/phpunit
+```
 
-### Repository
-* Product
-* Order
+## API
 
-### Service
-* Product
-    * createRandom
-* Payment
-    * purchase
-* Order
-    * create
-    * pay
+#### Create random products
+`POST /api/v1/product/random`
 
-### REST API
-* POST product/random - генерация рандомных сущностей "товар"
-* POST order - создание заказа
-* POST order/:id/pay - оплата заказа
+Params:
+* count | optional | int (min:1, max:100, default:20) - count random products
+
+Example request:
+```bash
+curl -X POST \
+  http://test-product.local/api/v1/product/random \
+  -H 'Content-Type: application/json' \
+  -d '{
+	"count": 5
+}'
+```
+
+Example response:
+```json
+{
+    "object": "product_ids",
+    "data": [
+        1180,
+        1181,
+        1182,
+        1183,
+        1184
+    ]
+}
+```
+
+#### Create order
+`POST /api/v1/order`
+
+Params:
+* product_ids | required | array (min_count:1, max_count:100) - list product ids
+
+Example request:
+```bash
+curl -X POST \
+  http://test-product.local/api/v1/order \
+  -H 'Content-Type: application/json' \
+  -d '{
+	"product_ids": [1,2,3]
+}
+'
+```
+
+Example response:
+```json
+{
+    "object": "order",
+    "data": {
+        "id": 168
+    }
+}
+```
+
+#### Pay order
+`POST /api/v1/order/{order_id}/pay`
+
+Params:
+* order_id | required | int - order id
+* amount | required | int - order amount in the smallest currency unit (e.g., 100 to charge 1 ruble)
+
+Example request:
+```bash
+curl -X POST \
+  http://test-product.local/api/v1/order/25/pay \
+  -H 'Content-Type: application/json' \
+  -d '{
+	"amount": 100
+}
+'
+```
+
+Example response:
+```json
+{
+    "object": "bool",
+    "data": true
+}
+```
