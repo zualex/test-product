@@ -7,6 +7,7 @@ namespace Tests\Unit\Service\Product;
 use App\Entity\Product;
 use App\Service\Product\Exception\NotExistProductIdException;
 use App\Service\Product\ProductService;
+use App\Util\MoneyAmount;
 use Tests\BaseTestCase;
 use Tests\DatabaseTransactions;
 
@@ -17,18 +18,18 @@ class ProductServiceTest extends BaseTestCase
     public function testCreate(): void
     {
         $name = $this->faker->name;
-        $price = $this->faker->numberBetween($min = 0, $max = 1000);
+        $price = MoneyAmount::fromReadable($this->faker->numberBetween($min = 0, $max = 1000));
 
         $product = $this->getProductService()->create($name, $price);
         $productNotFlushed = $this->getProductService()->create($name, $price, false);
 
         $this->assertNotNull($product->getId());
         $this->assertEquals($name, $product->getName());
-        $this->assertEquals($price, $product->getPrice());
+        $this->assertEquals($price->toInternal(), $product->getPrice()->toInternal());
 
         $this->assertNull($productNotFlushed->getId());
         $this->assertEquals($name, $productNotFlushed->getName());
-        $this->assertEquals($price, $productNotFlushed->getPrice());
+        $this->assertEquals($price->toInternal(), $productNotFlushed->getPrice()->toInternal());
     }
 
     public function testCreateRandom(): void

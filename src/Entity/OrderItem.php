@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use App\Util\MoneyAmount;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -47,7 +48,7 @@ class OrderItem
     private $name;
 
     /**
-     * @var float|null
+     * @var int|null
      *
      * @ORM\Column(type="bigint", nullable=true, options={"unsigned"=true})
      */
@@ -129,25 +130,25 @@ class OrderItem
     }
 
     /**
-     * @return float|null
+     * @return MoneyAmount|null
      */
-    public function getPrice(): ?float
+    public function getPrice(): ?MoneyAmount
     {
         if ($this->price !== null) {
-            return round($this->price / self::PRICE_MULTIPLIER, 6);
+            return MoneyAmount::fromInternal((int) $this->price);
         }
 
         return null;
     }
 
     /**
-     * @param float $price
+     * @param MoneyAmount $price
      *
      * @return self
      */
-    public function setPrice(float $price): self
+    public function setPrice(MoneyAmount $price): self
     {
-        $this->price = $price * self::PRICE_MULTIPLIER;
+        $this->price = $price->toInternal();
 
         return $this;
     }

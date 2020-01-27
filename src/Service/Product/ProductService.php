@@ -7,6 +7,7 @@ namespace App\Service\Product;
 use App\Entity\Product;
 use App\Service\Product\Exception\NotExistProductIdException;
 use App\Service\ServiceInterface;
+use App\Util\MoneyAmount;
 use Doctrine\ORM\EntityManager;
 use Faker\Factory;
 
@@ -66,7 +67,7 @@ class ProductService implements ServiceInterface
     public function createRandom(bool $isNeedFlush = true): Product
     {
         $name = $this->faker->name;
-        $price = $this->faker->numberBetween($min = 0, $max = 1000000);
+        $price = MoneyAmount::fromReadable($this->faker->numberBetween($min = 0, $max = 10000));
 
         return $this->create($name, $price, $isNeedFlush);
     }
@@ -75,14 +76,14 @@ class ProductService implements ServiceInterface
      * Create product
      *
      * @param string $name
-     * @param int $price
+     * @param MoneyAmount $price
      * @param bool $isNeedFlush
      *
      * @return Product
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
      */
-    public function create(string $name, int $price, bool $isNeedFlush = true): Product
+    public function create(string $name, MoneyAmount $price, bool $isNeedFlush = true): Product
     {
         $product = new Product();
         $product->setName($name);
