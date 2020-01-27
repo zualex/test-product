@@ -48,9 +48,9 @@ class OrderItem
     private $name;
 
     /**
-     * @var int|null
+     * @var int
      *
-     * @ORM\Column(type="bigint", nullable=true, options={"unsigned"=true})
+     * @ORM\Column(type="bigint", nullable=false, options={"unsigned"=true})
      */
     private $price;
 
@@ -130,15 +130,11 @@ class OrderItem
     }
 
     /**
-     * @return MoneyAmount|null
+     * @return MoneyAmount
      */
-    public function getPrice(): ?MoneyAmount
+    public function getPrice(): MoneyAmount
     {
-        if ($this->price !== null) {
-            return MoneyAmount::fromInternal((int) $this->price);
-        }
-
-        return null;
+        return MoneyAmount::fromInternal((int) $this->price);
     }
 
     /**
