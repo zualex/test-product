@@ -14,7 +14,8 @@ use Doctrine\ORM\Mapping as ORM;
 class Order
 {
     public const STATUS_NEW = 0;
-    public const STATUS_PAID = 1;
+    public const STATUS_PROCESSING = 1;
+    public const STATUS_PAID = 2;
 
     /**
      * @var int
@@ -57,7 +58,7 @@ class Order
      */
     public function getStatus(): int
     {
-        return $this->status;
+        return (int) $this->status;
     }
 
     /**
