@@ -106,22 +106,16 @@ class OrderService implements ServiceInterface
         $this->entityManager->beginTransaction();
 
         try {
-            /** @var Order $order */
-            $order = $this->entityManager->getRepository(Order::class)
-                ->findByIdWithLockMode($orderId);
-        } catch (NoResultException $exception) {
-            throw new NotFoundOrderException('Not found order');
-        }
+            $order = $this->getOrderOrFail($orderId);
 
-        $this->orderStatusService->validateCanPay($order);
+            $this->orderStatusService->validateCanPay($order);
 
-        $total = $this->getTotal($order);
+            $total = $this->getTotal($order);
 
-        if ($total->notEqual($amount)) {
-            throw new TotalAmountException('Not correct amount');
-        }
+            if ($total->notEqual($amount)) {
+                throw new TotalAmountException('Not correct amount');
+            }
 
-        try {
             if ($total->toApi() > 0) {
                 $this->paymentService->purchase($total);
             }
@@ -155,5 +149,22 @@ class OrderService implements ServiceInterface
         }
 
         return $result;
+    }
+
+    /**
+     * @param int $orderId
+     * @return Order
+     */
+    private function getOrderOrFail(int $orderId): Order
+    {
+        /** @var Order|null $order */
+        $order = $this->entityManager->getRepository(Order::class)
+            ->findByIdWithLockMode($orderId);
+
+        if ($order === null) {
+            throw new NotFoundOrderException('Not found order');
+        }
+
+        return $order;
     }
 }
