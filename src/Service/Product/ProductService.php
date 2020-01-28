@@ -25,6 +25,9 @@ class ProductService implements ServiceInterface
      */
     private $faker;
 
+    /**
+     * @param EntityManager $entityManager
+     */
     public function __construct(EntityManager $entityManager)
     {
         $this->entityManager = $entityManager;

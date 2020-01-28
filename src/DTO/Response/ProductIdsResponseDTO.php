@@ -10,11 +10,18 @@ class ProductIdsResponseDTO extends ResponseDTO
 {
     public const OBJECT = 'product_ids';
 
+    /**
+     * @param array $data
+     */
     public function __construct(array $data)
     {
         parent::__construct(self::OBJECT, $data);
     }
 
+    /**
+     * @param array $products
+     * @return ProductIdsResponseDTO
+     */
     public static function createFromListProductEntity(array $products): self
     {
         $data = array_map(static function ($item) {

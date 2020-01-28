@@ -113,10 +113,6 @@ class OrderService implements ServiceInterface
             throw new NotFoundOrderException('Not found order');
         }
 
-        if ($order === null) {
-            throw new NotFoundOrderException('Not found order');
-        }
-
         $this->orderStatusService->validateCanPay($order);
 
         $total = $this->getTotal($order);

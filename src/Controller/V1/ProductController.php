@@ -17,6 +17,7 @@ class ProductController extends BaseController
      *
      * @param CreateProductRandomRequestDTO $createProductRandomRequestDTO
      * @param ProductService $productService
+     *
      * @return Response
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException

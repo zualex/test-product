@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tests\Unit\Service\Status;
+namespace Tests\Unit\Service\Payment;
 
 use App\Service\Payment\Exception\PaymentException;
 use App\Service\Payment\PaymentService;

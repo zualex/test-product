@@ -30,7 +30,6 @@ class PaymentService implements ServiceInterface
     /**
      * @param MoneyAmount $amount
      * @return bool
-     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function purchase(MoneyAmount $amount): bool
     {
