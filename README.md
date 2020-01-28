@@ -138,3 +138,15 @@ Example response:
     "data": true
 }
 ```
+
+#### Errors
+
+The application uses conventional HTTP response codes to indicate the success or failure of an API request. Errors include an error code that briefly explains the error reported.
+
+Example error response:
+```json
+{
+    "code": "resource_missing",
+    "message": "Not found"
+}
+```
