@@ -110,7 +110,7 @@ class OrderServiceTest extends BaseTestCase
         $product = $this->getProductService()->create('product_1', $price);
         $order = $this->getOrderService()->create([$product->getId()]);
 
-        $this->getOrderStatusService()->setStatusProcessing($order);
+        $this->getOrderStatusService()->setStatusPaid($order);
 
         $this->getOrderService()->pay($order->getId(), MoneyAmount::fromReadable(0));
     }

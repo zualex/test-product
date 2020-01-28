@@ -15,6 +15,7 @@ use App\Service\ServiceInterface;
 use App\Service\Status\OrderStatusService;
 use App\Util\MoneyAmount;
 use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\NoResultException;
 
 class OrderService implements ServiceInterface
 {
@@ -102,9 +103,15 @@ class OrderService implements ServiceInterface
      */
     public function pay(int $orderId, MoneyAmount $amount): void
     {
-        /** @var Order $order */
-        $order = $this->entityManager->getRepository(Order::class)
-            ->findById($orderId);
+        $this->entityManager->beginTransaction();
+
+        try {
+            /** @var Order $order */
+            $order = $this->entityManager->getRepository(Order::class)
+                ->findByIdWithLockMode($orderId);
+        } catch (NoResultException $exception) {
+            throw new NotFoundOrderException('Not found order');
+        }
 
         if ($order === null) {
             throw new NotFoundOrderException('Not found order');
@@ -118,23 +125,20 @@ class OrderService implements ServiceInterface
             throw new TotalAmountException('Not correct amount');
         }
 
-        $this->orderStatusService->setStatusProcessing($order, true);
-
-        $this->entityManager->beginTransaction();
         try {
             if ($total->toApi() > 0) {
                 $this->paymentService->purchase($total);
             }
 
             $this->orderStatusService->setStatusPaid($order, true);
-
-            $this->entityManager->commit();
         } catch (\Throwable $exception) {
             $this->entityManager->rollback();
             $this->orderStatusService->setStatusNew($order, true);
 
             throw $exception;
         }
+
+        $this->entityManager->commit();
     }
 
     /**

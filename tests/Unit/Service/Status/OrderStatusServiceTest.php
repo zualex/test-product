@@ -24,10 +24,6 @@ class OrderStatusServiceTest extends BaseTestCase
         $this->assertEquals(Order::STATUS_NEW, $order->getStatus());
         $this->assertTrue($orderStatusService->isStatusNew($order));
 
-        $orderStatusService->setStatusProcessing($order);
-        $this->assertEquals(Order::STATUS_PROCESSING, $order->getStatus());
-        $this->assertTrue($orderStatusService->isStatusProcessing($order));
-
         $orderStatusService->setStatusPaid($order);
         $this->assertEquals(Order::STATUS_PAID, $order->getStatus());
         $this->assertTrue($orderStatusService->isStatusPaid($order));
@@ -41,9 +37,6 @@ class OrderStatusServiceTest extends BaseTestCase
     {
         $order = $this->createOrder();
         $orderStatusService = $this->getOrderStatusService();
-
-        $orderStatusService->setStatusProcessing($order);
-        $this->assertFalse($orderStatusService->canPay($order));
 
         $orderStatusService->setStatusPaid($order);
         $this->assertFalse($orderStatusService->canPay($order));
@@ -59,7 +52,7 @@ class OrderStatusServiceTest extends BaseTestCase
         $order = $this->createOrder();
         $orderStatusService = $this->getOrderStatusService();
 
-        $orderStatusService->setStatusProcessing($order);
+        $orderStatusService->setStatusPaid($order);
         $orderStatusService->validateCanPay($order);
     }
 

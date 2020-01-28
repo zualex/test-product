@@ -43,10 +43,6 @@ class OrderStatusService implements ServiceInterface
             throw new OrderStatusException('The order has already been paid');
         }
 
-        if ($this->isStatusProcessing($order)) {
-            throw new OrderStatusException('The order is still being processed');
-        }
-
         if ($this->canPay($order) === false) {
             throw new OrderStatusException('The order must be in status: NEW');
         }
@@ -67,15 +63,6 @@ class OrderStatusService implements ServiceInterface
      * @param Order $order
      * @return bool
      */
-    public function isStatusProcessing(Order $order): bool
-    {
-        return $order->getStatus() === Order::STATUS_PROCESSING;
-    }
-
-    /**
-     * @param Order $order
-     * @return bool
-     */
     public function isStatusPaid(Order $order): bool
     {
         return $order->getStatus() === Order::STATUS_PAID;
@@ -90,17 +77,6 @@ class OrderStatusService implements ServiceInterface
     public function setStatusNew(Order $order, bool $isNeedFlush = false): void
     {
         $this->setStatus($order, Order::STATUS_NEW, $isNeedFlush);
-    }
-
-    /**
-     * @param Order $order
-     * @param bool $isNeedFlush
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
-     */
-    public function setStatusProcessing(Order $order, bool $isNeedFlush = false): void
-    {
-        $this->setStatus($order, Order::STATUS_PROCESSING, $isNeedFlush);
     }
 
     /**
