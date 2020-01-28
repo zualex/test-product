@@ -49,6 +49,6 @@ class PaymentService implements ServiceInterface
 
     private function throwFailedToPayException(): void
     {
-        throw new PaymentException('Failed to pay, try again later.');
+        throw new PaymentException('Failed to pay. Try again later.');
     }
 }
