@@ -129,7 +129,6 @@ class OrderService implements ServiceInterface
             $this->orderStatusService->setStatusPaid($order, true);
         } catch (\Throwable $exception) {
             $this->entityManager->rollback();
-            $this->orderStatusService->setStatusNew($order, true);
 
             throw $exception;
         }
