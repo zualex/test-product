@@ -64,6 +64,11 @@ $containerBuilder->register('kernel', Kernel::class)
         $containerBuilder
     ]);
 
+$containerBuilder->register('http_client', \GuzzleHttp\Client::class)
+    ->setArguments([[
+        'timeout' => 5
+    ]]);
+
 $containerBuilder->register('controller_resolver', \App\Controller\Resolver\ContainerControllerResolver::class)
     ->setArguments([$containerBuilder]);
 
@@ -79,11 +84,19 @@ $containerBuilder->register(\App\Service\Product\ProductService::class, \App\Ser
 $containerBuilder->register(\App\Service\Status\OrderStatusService::class, \App\Service\Status\OrderStatusService::class)
     ->setArguments([new Reference('entity_manager')]);
 
+
+$containerBuilder->register(\App\Service\Payment\PaymentService::class, \App\Service\Payment\PaymentService::class)
+    ->setArguments([
+        new Reference('http_client')
+    ]);
+
+
 $containerBuilder->register(\App\Service\Order\OrderService::class, \App\Service\Order\OrderService::class)
     ->setArguments([
         new Reference('entity_manager'),
         new Reference(\App\Service\Product\ProductService::class),
         new Reference(\App\Service\Status\OrderStatusService::class),
+        new Reference(\App\Service\Payment\PaymentService::class),
     ]);
 
 return $containerBuilder;

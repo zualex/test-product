@@ -9,6 +9,7 @@ use App\Entity\OrderItem;
 use App\Entity\Product;
 use App\Service\Order\Exception\NotFoundOrderException;
 use App\Service\Order\Exception\TotalAmountException;
+use App\Service\Payment\PaymentService;
 use App\Service\Product\ProductService;
 use App\Service\ServiceInterface;
 use App\Service\Status\OrderStatusService;
@@ -33,18 +34,26 @@ class OrderService implements ServiceInterface
     private $orderStatusService;
 
     /**
+     * @var PaymentService
+     */
+    private $paymentService;
+
+    /**
      * @param EntityManager $entityManager
      * @param ProductService $productService
      * @param OrderStatusService $orderStatusService
+     * @param PaymentService $paymentService
      */
     public function __construct(
         EntityManager $entityManager,
         ProductService $productService,
-        OrderStatusService $orderStatusService
+        OrderStatusService $orderStatusService,
+        PaymentService $paymentService
     ) {
         $this->entityManager = $entityManager;
         $this->productService = $productService;
         $this->orderStatusService = $orderStatusService;
+        $this->paymentService = $paymentService;
     }
 
     /**
@@ -114,7 +123,7 @@ class OrderService implements ServiceInterface
         $this->entityManager->beginTransaction();
         try {
             if ($total->toApi() > 0) {
-                // TODO pay
+                $this->paymentService->purchase($total);
             }
 
             $this->orderStatusService->setStatusPaid($order, true);
