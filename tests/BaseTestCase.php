@@ -33,6 +33,13 @@ class BaseTestCase extends TestCase
      */
     protected static $booted = false;
 
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->faker = FakerFactory::create();
+    }
+
     protected function tearDown(): void
     {
         static::ensureKernelShutdown();
@@ -69,6 +76,9 @@ class BaseTestCase extends TestCase
         static::$container = null;
     }
 
+    /**
+     * @return ContainerInterface
+     */
     protected static function createContainer(): ContainerInterface
     {
         $routes = include __DIR__.'/../config/routes.php';
@@ -76,13 +86,9 @@ class BaseTestCase extends TestCase
         return include __DIR__.'/../config/containers.php';
     }
 
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        $this->faker = FakerFactory::create();
-    }
-
+    /**
+     * @return EntityManager
+     */
     protected function getEntityManager(): EntityManager
     {
         if (static::$booted === false) {
