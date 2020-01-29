@@ -13,8 +13,6 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class OrderItem
 {
-    public const PRICE_MULTIPLIER = 1000000;
-
     /**
      * @var int
      *
