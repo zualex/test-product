@@ -15,7 +15,6 @@ use App\Service\ServiceInterface;
 use App\Service\Status\OrderStatusService;
 use App\Util\MoneyAmount;
 use Doctrine\ORM\EntityManager;
-use Doctrine\ORM\NoResultException;
 
 class OrderService implements ServiceInterface
 {
